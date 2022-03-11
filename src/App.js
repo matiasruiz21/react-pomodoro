@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import Break from "./components/Break";
+import FlexContainer from "./components/FlexContainer";
+import Session from "./components/Session";
+import Clock from "./components/Clock";
+import GlobalStyles from "./Global";
+import StartStop from "./components/StartStop";
+import Reset from "./components/Reset";
+import { TimeProvider } from "./TimeContext";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <GlobalStyles />
+      <TimeProvider>
+        <h1 id="timer-label">Session</h1>
+        <Clock />
+        <FlexContainer>
+          <Session />
+          <Break />
+        </FlexContainer>
+        <StartStop />
+        <Reset />
+      </TimeProvider>
+    </>
   );
 }
 
