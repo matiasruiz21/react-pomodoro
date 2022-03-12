@@ -2,6 +2,7 @@ import { useReducer, useRef } from "react";
 import BreakInput from "./components/BreakInput";
 import Display from "./components/Display";
 import SessionInput from "./components/SessionInput";
+import { FlexContainer } from "./components/styled_components/FlexContainer";
 import GlobalStyles from "./Global";
 import { PauseSvg } from "./svg/PauseSvg";
 import { PlaySvg } from "./svg/PlaySvg";
@@ -73,49 +74,49 @@ function reducer(state, action) {
 
     case ACTIONS.HANDLE_INPUT:
       if (action.payload.value.toString().match(/[^\d]/) || state.isRunning)
-        return;
+        return state;
       return action.payload.id === "session-length"
         ? {
-            ...state,
-            sessionTime: Math.min(3600, Math.max(action.payload.value * 60, 0)),
-            sessionInput: Math.min(
-              3600,
-              Math.max(action.payload.value * 60, 0)
-            ),
-          }
+          ...state,
+          sessionTime: Math.min(3600, Math.max(action.payload.value * 60, 0)),
+          sessionInput: Math.min(
+            3600,
+            Math.max(action.payload.value * 60, 0)
+          ),
+        }
         : {
-            ...state,
-            breakTime: Math.min(3600, Math.max(action.payload.value * 60, 0)),
-            breakInput: Math.min(3600, Math.max(action.payload.value * 60, 0)),
-          };
+          ...state,
+          breakTime: Math.min(3600, Math.max(action.payload.value * 60, 0)),
+          breakInput: Math.min(3600, Math.max(action.payload.value * 60, 0)),
+        };
 
     case ACTIONS.HANDLE_INCREMENT:
       return action.payload.id === "session-increment"
         ? {
-            ...state,
-            sessionTime:
-              state.sessionTime >= 3600 ? 3600 : state.sessionTime + 60,
-            sessionInput:
-              state.sessionInput >= 3600 ? 3600 : state.sessionInput + 60,
-          }
+          ...state,
+          sessionTime:
+            state.sessionTime >= 3600 ? 3600 : state.sessionTime + 60,
+          sessionInput:
+            state.sessionInput >= 3600 ? 3600 : state.sessionInput + 60,
+        }
         : {
-            ...state,
-            breakTime: state.breakTime >= 3600 ? 3600 : state.breakTime + 60,
-            breakInput: state.breakInput >= 3600 ? 3600 : state.breakInput + 60,
-          };
+          ...state,
+          breakTime: state.breakTime >= 3600 ? 3600 : state.breakTime + 60,
+          breakInput: state.breakInput >= 3600 ? 3600 : state.breakInput + 60,
+        };
 
     case ACTIONS.HANDLE_DECREMENT:
       return action.payload.id === "session-decrement"
         ? {
-            ...state,
-            sessionTime: state.sessionTime - 60,
-            sessionInput: state.sessionInput - 60,
-          }
+          ...state,
+          sessionTime: state.sessionTime - 60,
+          sessionInput: state.sessionInput - 60,
+        }
         : {
-            ...state,
-            breakTime: state.breakTime - 60,
-            breakInput: state.breakInput - 60,
-          };
+          ...state,
+          breakTime: state.breakTime - 60,
+          breakInput: state.breakInput - 60,
+        };
 
     default:
       return state;
@@ -171,17 +172,20 @@ export default function App() {
         <ResetSvg />
       </button>
       <br></br>
-      <SessionInput
-        dispatch={dispatch}
-        isRunning={state.isRunning}
-        sessionInput={state.sessionInput}
-      />
-      <br></br>
-      <BreakInput
-        dispatch={dispatch}
-        isRunning={state.isRunning}
-        breakInput={state.breakInput}
-      />
+      <FlexContainer>
+        <SessionInput
+          dispatch={dispatch}
+          isRunning={state.isRunning}
+          sessionInput={state.sessionInput}
+        />
+        <BreakInput
+          dispatch={dispatch}
+          isRunning={state.isRunning}
+          breakInput={state.breakInput}
+        />
+
+      </FlexContainer>
+
       <br></br>
       <audio id="beep" src={state.audioSrc} ref={audioRef}></audio>
       <div style={{ textAlign: "left" }}>

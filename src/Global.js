@@ -8,11 +8,13 @@ const theme = css`
   * {
     box-sizing: border-box;
     margin: 0;
+    overflow: hidden;
   }
 
   body {
     min-height: 100vh;
     text-align: center;
+    padding-inline: 1rem;
   }
 `;
 
