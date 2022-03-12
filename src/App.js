@@ -1,7 +1,13 @@
 import { useReducer, useRef } from "react";
+import BreakInput from "./components/BreakInput";
+import Display from "./components/Display";
+import SessionInput from "./components/SessionInput";
 import GlobalStyles from "./Global";
+import { PauseSvg } from "./svg/PauseSvg";
+import { PlaySvg } from "./svg/PlaySvg";
+import { ResetSvg } from "./svg/ResetSvg";
 
-const ACTIONS = {
+export const ACTIONS = {
   TICK: "tick",
   RESET: "reset",
   TOGGLE_CLOCK: "toggle-clock",
@@ -40,7 +46,6 @@ function reducer(state, action) {
 
     case ACTIONS.TICK:
       if (state.sessionTime <= 0) {
-        console.log(action.payload);
         action.payload.play();
         return {
           ...state,
@@ -59,23 +64,31 @@ function reducer(state, action) {
       return state.isSession
         ? { ...state, sessionTime: state.sessionTime - 1 }
         : { ...state, breakTime: state.breakTime - 1 };
+
     case ACTIONS.RESET:
       action.payload.pause();
       action.payload.currentTime = 0;
       clearInterval(intervalId);
       return init(initialState);
+
     case ACTIONS.HANDLE_INPUT:
+      if (action.payload.value.toString().match(/[^\d]/) || state.isRunning)
+        return;
       return action.payload.id === "session-length"
         ? {
             ...state,
-            sessionTime: Math.min(3600, Math.max(action.payload.value, 0)),
-            sessionInput: Math.min(3600, Math.max(action.payload.value, 0)),
+            sessionTime: Math.min(3600, Math.max(action.payload.value * 60, 0)),
+            sessionInput: Math.min(
+              3600,
+              Math.max(action.payload.value * 60, 0)
+            ),
           }
         : {
             ...state,
-            breakTime: Math.min(3600, Math.max(action.payload.value, 0)),
-            breakInput: Math.min(3600, Math.max(action.payload.value, 0)),
+            breakTime: Math.min(3600, Math.max(action.payload.value * 60, 0)),
+            breakInput: Math.min(3600, Math.max(action.payload.value * 60, 0)),
           };
+
     case ACTIONS.HANDLE_INCREMENT:
       return action.payload.id === "session-increment"
         ? {
@@ -90,6 +103,7 @@ function reducer(state, action) {
             breakTime: state.breakTime >= 3600 ? 3600 : state.breakTime + 60,
             breakInput: state.breakInput >= 3600 ? 3600 : state.breakInput + 60,
           };
+
     case ACTIONS.HANDLE_DECREMENT:
       return action.payload.id === "session-decrement"
         ? {
@@ -102,20 +116,13 @@ function reducer(state, action) {
             breakTime: state.breakTime - 60,
             breakInput: state.breakInput - 60,
           };
+
     default:
       return state;
   }
 }
 
 let intervalId = null;
-
-function getMinutos(time) {
-  return Math.floor(time / 60);
-}
-
-function getSegundos(time) {
-  return time - Math.floor(time / 60) * 60;
-}
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState, init);
@@ -135,36 +142,24 @@ export default function App() {
     }, 1000);
   }
 
-  function handleInput(e) {
-    // Si el input tiene cualquier caracter que no sea un dígito o el reloj esta corriendo returns.
-    if (e.value.toString().match(/[^\d]/) || state.isRunning) return;
-    // Convierte a segundos y actualiza el state.
-    dispatch({
-      type: ACTIONS.HANDLE_INPUT,
-      payload: { id: e.id, value: e.value * 60 },
-    });
-  }
-
-  let minutos = getMinutos(
-    state.isSession ? state.sessionTime : state.breakTime
-  );
-  let segundos = getSegundos(
-    state.isSession ? state.sessionTime : state.breakTime
-  );
-
   return (
     <div className="App">
       <GlobalStyles />
       <h1>Reloj Pomodoro</h1>
-      <h4 id="timer-label">{state.isSession ? "Session" : "Break"}</h4>
-      <p id="time-left">
-        {minutos.toString().length <= 1 ? "0" + minutos : minutos}:
-        {segundos.toString().length <= 1 ? "0" + segundos : segundos}
-      </p>
-      <button id="start_stop" onClick={() => toggleClock()}>
-        Start/Stop
+      <Display
+        isSession={state.isSession}
+        sessionTime={state.sessionTime}
+        breakTime={state.breakTime}
+      />
+      <button
+        title={state.isRunning ? "Pause" : "Play"}
+        id="start_stop"
+        onClick={() => toggleClock()}
+      >
+        {state.isRunning ? <PauseSvg /> : <PlaySvg />}
       </button>
       <button
+        title="Reset"
         id="reset"
         onClick={() =>
           dispatch({
@@ -173,68 +168,20 @@ export default function App() {
           })
         }
       >
-        Reset
+        <ResetSvg />
       </button>
       <br></br>
-      <p id="session-label">Session</p>
-      <input
-        value={getMinutos(state.sessionInput)}
-        onChange={(e) => handleInput(e.target)}
-        id="session-length"
-      ></input>
-      <button
-        id="session-increment"
-        onClick={(e) =>
-          dispatch({
-            type: ACTIONS.HANDLE_INCREMENT,
-            payload: { id: e.target.id },
-          })
-        }
-      >
-        +
-      </button>
-      <button
-        id="session-decrement"
-        onClick={(e) => {
-          if (state.sessionInput <= 60) return;
-          dispatch({
-            type: ACTIONS.HANDLE_DECREMENT,
-            payload: { id: e.target.id },
-          });
-        }}
-      >
-        -
-      </button>
+      <SessionInput
+        dispatch={dispatch}
+        isRunning={state.isRunning}
+        sessionInput={state.sessionInput}
+      />
       <br></br>
-      <p id="break-label">Break Length</p>
-      <input
-        value={getMinutos(state.breakInput)}
-        onChange={(e) => handleInput(e.target)}
-        id="break-length"
-      ></input>
-      <button
-        id="break-increment"
-        onClick={(e) =>
-          dispatch({
-            type: ACTIONS.HANDLE_INCREMENT,
-            payload: { id: e.target.id },
-          })
-        }
-      >
-        +
-      </button>
-      <button
-        id="break-decrement"
-        onClick={(e) => {
-          if (state.breakInput <= 60) return state;
-          dispatch({
-            type: ACTIONS.HANDLE_DECREMENT,
-            payload: { id: e.target.id },
-          });
-        }}
-      >
-        -
-      </button>
+      <BreakInput
+        dispatch={dispatch}
+        isRunning={state.isRunning}
+        breakInput={state.breakInput}
+      />
       <br></br>
       <audio id="beep" src={state.audioSrc} ref={audioRef}></audio>
       <div style={{ textAlign: "left" }}>

@@ -7,10 +7,10 @@ const theme = css`
 
   * {
     box-sizing: border-box;
+    margin: 0;
   }
 
   body {
-    margin: 0;
     min-height: 100vh;
     text-align: center;
   }
