@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 const FlexContainer = styled.div`
-    display: flex;
-    justify-content: space-evenly;
+  display: flex;
+  justify-content: ${({ justify }) => justify};
+  gap: ${({ gap }) => gap};
 `;
 
 export { FlexContainer };

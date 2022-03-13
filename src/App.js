@@ -1,12 +1,15 @@
 import { useReducer, useRef } from "react";
+import { ThemeProvider } from "styled-components";
 import BreakInput from "./components/BreakInput";
 import Display from "./components/Display";
+import useDarkMode from "./components/hooks/useDarkMode";
+import ResetClock from "./components/ResetClock";
 import SessionInput from "./components/SessionInput";
 import { FlexContainer } from "./components/styled_components/FlexContainer";
-import GlobalStyles from "./Global";
-import { PauseSvg } from "./svg/PauseSvg";
-import { PlaySvg } from "./svg/PlaySvg";
-import { ResetSvg } from "./svg/ResetSvg";
+import ToggleClock from "./components/ToggleClock";
+import ToggleTheme from "./components/ToggleTheme";
+import GlobalStyles from "./GlobalStyles";
+import { darkTheme, ligthTheme } from "./themes";
 
 export const ACTIONS = {
   TICK: "tick",
@@ -47,7 +50,7 @@ function reducer(state, action) {
 
     case ACTIONS.TICK:
       if (state.sessionTime <= 0) {
-        action.payload.play();
+        action.payload.audio.play();
         return {
           ...state,
           isSession: !state.isSession,
@@ -67,8 +70,8 @@ function reducer(state, action) {
         : { ...state, breakTime: state.breakTime - 1 };
 
     case ACTIONS.RESET:
-      action.payload.pause();
-      action.payload.currentTime = 0;
+      action.payload.audio.pause();
+      action.payload.audio.currentTime = 0;
       clearInterval(intervalId);
       return init(initialState);
 
@@ -77,46 +80,46 @@ function reducer(state, action) {
         return state;
       return action.payload.id === "session-length"
         ? {
-          ...state,
-          sessionTime: Math.min(3600, Math.max(action.payload.value * 60, 0)),
-          sessionInput: Math.min(
-            3600,
-            Math.max(action.payload.value * 60, 0)
-          ),
-        }
+            ...state,
+            sessionTime: Math.min(3600, Math.max(action.payload.value * 60, 0)),
+            sessionInput: Math.min(
+              3600,
+              Math.max(action.payload.value * 60, 0)
+            ),
+          }
         : {
-          ...state,
-          breakTime: Math.min(3600, Math.max(action.payload.value * 60, 0)),
-          breakInput: Math.min(3600, Math.max(action.payload.value * 60, 0)),
-        };
+            ...state,
+            breakTime: Math.min(3600, Math.max(action.payload.value * 60, 0)),
+            breakInput: Math.min(3600, Math.max(action.payload.value * 60, 0)),
+          };
 
     case ACTIONS.HANDLE_INCREMENT:
       return action.payload.id === "session-increment"
         ? {
-          ...state,
-          sessionTime:
-            state.sessionTime >= 3600 ? 3600 : state.sessionTime + 60,
-          sessionInput:
-            state.sessionInput >= 3600 ? 3600 : state.sessionInput + 60,
-        }
+            ...state,
+            sessionTime:
+              state.sessionTime >= 3600 ? 3600 : state.sessionTime + 60,
+            sessionInput:
+              state.sessionInput >= 3600 ? 3600 : state.sessionInput + 60,
+          }
         : {
-          ...state,
-          breakTime: state.breakTime >= 3600 ? 3600 : state.breakTime + 60,
-          breakInput: state.breakInput >= 3600 ? 3600 : state.breakInput + 60,
-        };
+            ...state,
+            breakTime: state.breakTime >= 3600 ? 3600 : state.breakTime + 60,
+            breakInput: state.breakInput >= 3600 ? 3600 : state.breakInput + 60,
+          };
 
     case ACTIONS.HANDLE_DECREMENT:
       return action.payload.id === "session-decrement"
         ? {
-          ...state,
-          sessionTime: state.sessionTime - 60,
-          sessionInput: state.sessionInput - 60,
-        }
+            ...state,
+            sessionTime: state.sessionTime - 60,
+            sessionInput: state.sessionInput - 60,
+          }
         : {
-          ...state,
-          breakTime: state.breakTime - 60,
-          breakInput: state.breakInput - 60,
-        };
+            ...state,
+            breakTime: state.breakTime - 60,
+            breakInput: state.breakInput - 60,
+          };
 
     default:
       return state;
@@ -127,7 +130,9 @@ let intervalId = null;
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState, init);
+  const [theme, toggleTheme] = useDarkMode();
   const audioRef = useRef();
+  console.log(theme);
 
   function toggleClock() {
     dispatch({
@@ -138,71 +143,61 @@ export default function App() {
     intervalId = setInterval(() => {
       dispatch({
         type: ACTIONS.TICK,
-        payload: audioRef.current,
+        payload: { audio: audioRef.current },
       });
     }, 1000);
   }
 
   return (
-    <div className="App">
-      <GlobalStyles />
-      <h1>Reloj Pomodoro</h1>
-      <Display
-        isSession={state.isSession}
-        sessionTime={state.sessionTime}
-        breakTime={state.breakTime}
-      />
-      <button
-        title={state.isRunning ? "Pause" : "Play"}
-        id="start_stop"
-        onClick={() => toggleClock()}
-      >
-        {state.isRunning ? <PauseSvg /> : <PlaySvg />}
-      </button>
-      <button
-        title="Reset"
-        id="reset"
-        onClick={() =>
-          dispatch({
-            type: ACTIONS.RESET,
-            payload: audioRef.current,
-          })
-        }
-      >
-        <ResetSvg />
-      </button>
-      <br></br>
-      <FlexContainer>
-        <SessionInput
-          dispatch={dispatch}
-          isRunning={state.isRunning}
-          sessionInput={state.sessionInput}
+    <ThemeProvider theme={theme === "ligth" ? ligthTheme : darkTheme}>
+      <div className="App">
+        <GlobalStyles />
+        <h1>Reloj Pomodoro</h1>
+        <Display
+          isSession={state.isSession}
+          sessionTime={state.sessionTime}
+          breakTime={state.breakTime}
         />
-        <BreakInput
-          dispatch={dispatch}
-          isRunning={state.isRunning}
-          breakInput={state.breakInput}
-        />
+        <FlexContainer justify={"center"} gap={"0.5rem"}>
+          <ToggleClock isRunning={state.isRunning} toggleClock={toggleClock} />
+          <ResetClock dispatch={dispatch} audioRef={audioRef} />
+        </FlexContainer>
 
-      </FlexContainer>
+        <br></br>
+        <FlexContainer justify={"space-evenly"}>
+          <SessionInput
+            dispatch={dispatch}
+            isRunning={state.isRunning}
+            sessionInput={state.sessionInput}
+          />
+          <BreakInput
+            dispatch={dispatch}
+            isRunning={state.isRunning}
+            breakInput={state.breakInput}
+          />
+        </FlexContainer>
 
-      <br></br>
-      <audio id="beep" src={state.audioSrc} ref={audioRef}></audio>
-      <div style={{ textAlign: "left" }}>
-        <ul>
-          State:
-          {Object.keys(state).map((e) => (
-            <li key={e}>
-              {e}:{" "}
-              {typeof state[e] === "boolean"
-                ? state[e]
-                  ? "True"
-                  : "False"
-                : state[e]}
-            </li>
-          ))}
-        </ul>
+        <br></br>
+        <ToggleTheme theme={theme} toggleTheme={toggleTheme} />
+        <br></br>
+
+        <audio id="beep" src={state.audioSrc} ref={audioRef}></audio>
+        <div style={{ textAlign: "left" }}>
+          <ul>
+            State:
+            {Object.keys(state).map((e) => (
+              <li key={e}>
+                {e}:{" "}
+                {typeof state[e] === "boolean"
+                  ? state[e]
+                    ? "True"
+                    : "False"
+                  : state[e]}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
