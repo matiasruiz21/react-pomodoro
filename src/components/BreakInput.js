@@ -4,7 +4,7 @@ import { getMinutos } from "../utils/getters";
 const BreakInput = ({ dispatch, isRunning, breakInput }) => {
   return (
     <div id="break-input">
-      <p id="break-label">Break Length</p>
+      <label id="break-label">Duración del Descanso</label>
       <input
         value={getMinutos(breakInput)}
         onChange={(e) =>

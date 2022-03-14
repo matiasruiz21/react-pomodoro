@@ -4,7 +4,7 @@ import { getMinutos } from "../utils/getters";
 const SessionInput = ({ dispatch, isRunning, sessionInput }) => {
   return (
     <div id="session-input">
-      <p id="session-label">Session Length</p>
+      <label id="session-label">Duración de la Sesión</label>
       <input
         value={getMinutos(sessionInput)}
         onChange={(e) => {
@@ -15,6 +15,7 @@ const SessionInput = ({ dispatch, isRunning, sessionInput }) => {
         }}
         id="session-length"
       ></input>
+
       <button
         id="session-increment"
         onClick={(e) => {

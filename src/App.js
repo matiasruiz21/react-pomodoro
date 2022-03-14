@@ -132,9 +132,8 @@ export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState, init);
   const [theme, toggleTheme] = useDarkMode();
   const audioRef = useRef();
-  console.log(theme);
 
-  function toggleClock() {
+  const toggleClock = () => {
     dispatch({
       type: ACTIONS.TOGGLE_CLOCK,
     });
@@ -146,7 +145,10 @@ export default function App() {
         payload: { audio: audioRef.current },
       });
     }, 1000);
-  }
+  };
+
+  //  TODO: Validar el almacenamiento local de varialbes
+  //  como theme, sessionTime y breakTime
 
   return (
     <ThemeProvider theme={theme === "ligth" ? ligthTheme : darkTheme}>
@@ -158,7 +160,12 @@ export default function App() {
           sessionTime={state.sessionTime}
           breakTime={state.breakTime}
         />
-        <FlexContainer justify={"center"} gap={"0.5rem"}>
+        <FlexContainer
+          justify={"center"}
+          alignItems={"center"}
+          gap={"0.5rem"}
+          flexDirection={"column"}
+        >
           <ToggleClock isRunning={state.isRunning} toggleClock={toggleClock} />
           <ResetClock dispatch={dispatch} audioRef={audioRef} />
         </FlexContainer>

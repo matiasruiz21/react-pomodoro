@@ -1,20 +1,14 @@
 export const ResetSvg = () => {
   return (
     <svg
-      stroke="currentColor"
-      fill="currentColor"
-      strokeWidth="0"
-      viewBox="0 0 24 24"
-      height="1em"
-      width="1em"
       xmlns="http://www.w3.org/2000/svg"
+      height="2em"
+      viewBox="0 0 24 24"
+      width="2em"
+      fill="currentColor"
     >
-      <path
-        fill="none"
-        stroke="#000"
-        strokeWidth="2"
-        d="M20,8 C18.5974037,5.04031171 15.536972,3 12,3 C7.02943725,3 3,7.02943725 3,12 C3,16.9705627 7.02943725,21 12,21 L12,21 C16.9705627,21 21,16.9705627 21,12 M21,3 L21,9 L15,9"
-      ></path>
+      <path d="M0 0h24v24H0z" fill="none" />
+      <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
     </svg>
   );
 };

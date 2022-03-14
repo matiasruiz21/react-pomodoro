@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { red } from "../../themes";
 
-const MainBtnStyled = styled.button`
+const ResetBtnStyled = styled.button`
   /* Shape */
-  border-radius: 10px;
-  padding: 0.25rem 3.5rem;
+  border-radius: 4px;
+
+  padding: 0.25rem 0.25rem;
   outline: none;
   border: none;
 
@@ -16,7 +17,7 @@ const MainBtnStyled = styled.button`
   text-transform: uppercase;
 
   /* On Primary / High Emphasis */
-  color: ${red[50]};
+  color: #fff;
 
   /* Primary/200 */
   background: ${red[500]};
@@ -39,4 +40,4 @@ const MainBtnStyled = styled.button`
   }
 `;
 
-export { MainBtnStyled };
+export { ResetBtnStyled };
