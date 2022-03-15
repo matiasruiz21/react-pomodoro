@@ -5,6 +5,7 @@ const DisplayStyled = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding-inline: 15vw;
   margin: 1rem 0.35rem;
   background: linear-gradient(
       0deg,

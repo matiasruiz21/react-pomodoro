@@ -1,10 +1,10 @@
 import { ResetSvg } from "../svg/ResetSvg";
 import { ACTIONS } from "../App";
-import { ResetBtnStyled } from "./styled_components/ResetBtnStyled";
+import { BtnStyled } from "./styled_components/BtnStyled";
 
 const ResetClock = ({ dispatch, audioRef }) => {
   return (
-    <ResetBtnStyled
+    <BtnStyled
       title="Reset"
       id="reset"
       onClick={() =>
@@ -13,9 +13,10 @@ const ResetClock = ({ dispatch, audioRef }) => {
           payload: { audio: audioRef.current },
         })
       }
+      padding={"0.125rem 0.25rem"}
     >
       <ResetSvg />
-    </ResetBtnStyled>
+    </BtnStyled>
   );
 };
 

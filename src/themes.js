@@ -11,6 +11,11 @@ export const darkTheme = {
   },
   divider: "rgba(255, 255, 255, 0.12)",
   bw: "rgb(255,255,255)",
+  red: {
+    background: "#d32f2f",
+    hover: "#cd2b2b",
+    active: "#c62828",
+  },
 };
 
 export const ligthTheme = {
@@ -25,7 +30,12 @@ export const ligthTheme = {
     selected: "rgba(0, 0, 0, 0.08)",
   },
   divider: "rgba(0, 0, 0, 0.12)",
-  bw: "rgb(0,0,0)",
+  bw: "rgba(0,0,0,0.80)",
+  red: {
+    background: "#f44336",
+    hover: "#e53935",
+    active: "#d32f2f",
+  },
 };
 
 export const red = {
@@ -39,6 +49,7 @@ export const red = {
   500: "#f44336",
   600: "#e53935",
   700: "#d32f2f",
+  750: "#cd2b2b",
   800: "#c62828",
   900: "#b71c1c",
 };

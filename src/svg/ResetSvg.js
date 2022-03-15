@@ -2,9 +2,9 @@ export const ResetSvg = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      height="2em"
+      height="1.75em"
       viewBox="0 0 24 24"
-      width="2em"
+      width="1.75em"
       fill="currentColor"
     >
       <path d="M0 0h24v24H0z" fill="none" />

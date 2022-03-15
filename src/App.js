@@ -10,6 +10,7 @@ import ToggleClock from "./components/ToggleClock";
 import ToggleTheme from "./components/ToggleTheme";
 import GlobalStyles from "./GlobalStyles";
 import { darkTheme, ligthTheme } from "./themes";
+import "./normalize.css";
 
 export const ACTIONS = {
   TICK: "tick",
@@ -94,6 +95,8 @@ function reducer(state, action) {
           };
 
     case ACTIONS.HANDLE_INCREMENT:
+      console.log(action.payload.id);
+
       return action.payload.id === "session-increment"
         ? {
             ...state,
@@ -109,6 +112,7 @@ function reducer(state, action) {
           };
 
     case ACTIONS.HANDLE_DECREMENT:
+      console.log(action.payload.id);
       return action.payload.id === "session-decrement"
         ? {
             ...state,
@@ -163,14 +167,13 @@ export default function App() {
         <FlexContainer
           justify={"center"}
           alignItems={"center"}
-          gap={"0.5rem"}
+          gap={"0.75rem"}
           flexDirection={"column"}
+          padding={"0.25rem 0 1rem 0 "}
         >
           <ToggleClock isRunning={state.isRunning} toggleClock={toggleClock} />
           <ResetClock dispatch={dispatch} audioRef={audioRef} />
         </FlexContainer>
-
-        <br></br>
         <FlexContainer justify={"space-evenly"}>
           <SessionInput
             dispatch={dispatch}
@@ -189,7 +192,8 @@ export default function App() {
         <br></br>
 
         <audio id="beep" src={state.audioSrc} ref={audioRef}></audio>
-        <div style={{ textAlign: "left" }}>
+        {/* Display State (Dev) */}
+        {/* <div style={{ textAlign: "left" }}>
           <ul>
             State:
             {Object.keys(state).map((e) => (
@@ -203,7 +207,7 @@ export default function App() {
               </li>
             ))}
           </ul>
-        </div>
+        </div> */}
       </div>
     </ThemeProvider>
   );

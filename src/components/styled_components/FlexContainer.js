@@ -7,7 +7,7 @@ const FlexContainer = styled.div`
   gap: ${({ gap }) => gap};
   flex-direction: ${({ flexDirection }) => flexDirection};
   width: ${({ width }) => width};
-  padding: 0.25rem 0 1rem 0;
+  padding: ${({ padding }) => padding};
 `;
 
 export { FlexContainer };
