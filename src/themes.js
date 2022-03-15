@@ -21,7 +21,7 @@ export const darkTheme = {
 export const ligthTheme = {
   background: "#fff",
   text: {
-    primary: "rgba(0, 0, 0, 0.87)",
+    primary: "rgba(0, 0, 0, 0.70)",
     secondary: "rgba(0, 0, 0, 0.6)",
   },
   action: {

@@ -11,6 +11,9 @@ import ToggleTheme from "./components/ToggleTheme";
 import GlobalStyles from "./GlobalStyles";
 import { darkTheme, ligthTheme } from "./themes";
 import "./normalize.css";
+import SettingsBtn from "./components/SettingsBtn";
+import Modal from "./components/Modal";
+import { useState } from "react";
 
 export const ACTIONS = {
   TICK: "tick",
@@ -135,8 +138,8 @@ let intervalId = null;
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState, init);
   const [theme, toggleTheme] = useDarkMode();
+  const [modalOpen, setModalOpen] = useState(false);
   const audioRef = useRef();
-
   const toggleClock = () => {
     dispatch({
       type: ACTIONS.TOGGLE_CLOCK,
@@ -190,7 +193,8 @@ export default function App() {
         <br></br>
         <ToggleTheme theme={theme} toggleTheme={toggleTheme} />
         <br></br>
-
+        <Modal modalOpen={modalOpen} onClose={() => setModalOpen(false)} />
+        <SettingsBtn setModalOpen={setModalOpen} />
         <audio id="beep" src={state.audioSrc} ref={audioRef}></audio>
         {/* Display State (Dev) */}
         {/* <div style={{ textAlign: "left" }}>
