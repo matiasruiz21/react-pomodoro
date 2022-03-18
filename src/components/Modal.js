@@ -7,8 +7,9 @@ import { useEffect } from "react";
 import { SettingsElemStyled } from "./styled_components/SettingsElemStyled";
 import Switch from "./Switch";
 import SOUNDS from "../sounds";
+import { SelectStyled } from "./styled_components/SelectStyled";
 
-const Modal = ({ modalOpen, onClose, theme, toggleTheme, setSound }) => {
+const Modal = ({ modalOpen, onClose, theme, toggleTheme, setSound, sound }) => {
   useEffect(() => {
     const close = (e) => {
       if (e.key === "Escape") {
@@ -35,7 +36,7 @@ const Modal = ({ modalOpen, onClose, theme, toggleTheme, setSound }) => {
         </SettingsElemStyled>
         <SettingsElemStyled>
           <label htmlFor="soundOp">Sonido de alarma</label>
-          <select
+          <SelectStyled
             name="sounds"
             id="soundOp"
             onChange={(e) => {
@@ -43,16 +44,16 @@ const Modal = ({ modalOpen, onClose, theme, toggleTheme, setSound }) => {
               var audio = new Audio(SOUNDS[e.target.value]);
               audio.play();
             }}
+            defaultValue={Object.keys(SOUNDS).find(
+              (key) => SOUNDS[key] === sound
+            )}
           >
             <option value="Campana">Campana</option>
             <option value="TuTu">TuTu</option>
             <option value="Beep">Beep</option>
             <option value="Mail">Mail</option>
             <option value="WinXp">WinXp</option>
-          </select>
-        </SettingsElemStyled>
-        <SettingsElemStyled>
-          <div>Notificaciones</div>
+          </SelectStyled>
         </SettingsElemStyled>
       </ModalStyled>
     </>,

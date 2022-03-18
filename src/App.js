@@ -12,9 +12,9 @@ import { darkTheme, ligthTheme } from "./themes";
 import "./normalize.css";
 import SettingsBtn from "./components/SettingsBtn";
 import Modal from "./components/Modal";
-import { useState } from "react";
 import { useLocalStorage } from "./components/hooks/useLocalStorage";
 import SOUNDS from "./sounds";
+import useHashRouteToggle from "./components/hooks/useHashRouteToggle";
 
 export const ACTIONS = {
   TICK: "tick",
@@ -26,10 +26,10 @@ export const ACTIONS = {
 };
 
 const initialState = {
-  sessionTime: 5,
-  breakTime: 3,
-  sessionInput: 5,
-  breakInput: 3,
+  sessionTime: 1500,
+  breakTime: 300,
+  sessionInput: 1500,
+  breakInput: 300,
   isRunning: false,
   isSession: true,
 };
@@ -131,15 +131,13 @@ function reducer(state, action) {
 // TODO:
 // https://stackoverflow.com/questions/8635502/how-do-i-clear-all-intervals
 // Implement Clock Object
-// https://stackoverflow.com/questions/60838781/controlling-browser-back-button-in-react
-// Modal close on back button
 
 let intervalId = null;
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState, init);
   const [theme, toggleTheme] = useDarkMode();
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useHashRouteToggle("#modal");
   const [sound, setSound] = useLocalStorage("sound", SOUNDS["Campana"]);
   const audioRef = useRef();
   const toggleClock = () => {
@@ -155,6 +153,7 @@ export default function App() {
       });
     }, 1000);
   };
+
   //  TODO: Validar el almacenamiento local de varialbes
   //  como theme, sessionTime y breakTime
 
@@ -197,6 +196,7 @@ export default function App() {
           theme={theme}
           toggleTheme={toggleTheme}
           setSound={setSound}
+          sound={sound}
         />
         <SettingsBtn setModalOpen={setModalOpen} />
         <audio id="beep" src={sound} ref={audioRef} type="audio/mp3"></audio>
