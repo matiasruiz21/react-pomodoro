@@ -7,13 +7,14 @@ import ResetClock from "./components/ResetClock";
 import SessionInput from "./components/SessionInput";
 import { FlexContainer } from "./components/styled_components/FlexContainer";
 import ToggleClock from "./components/ToggleClock";
-import ToggleTheme from "./components/ToggleTheme";
 import GlobalStyles from "./GlobalStyles";
 import { darkTheme, ligthTheme } from "./themes";
 import "./normalize.css";
 import SettingsBtn from "./components/SettingsBtn";
 import Modal from "./components/Modal";
 import { useState } from "react";
+import { useLocalStorage } from "./components/hooks/useLocalStorage";
+import SOUNDS from "./sounds";
 
 export const ACTIONS = {
   TICK: "tick",
@@ -25,14 +26,12 @@ export const ACTIONS = {
 };
 
 const initialState = {
-  sessionTime: 1500,
-  breakTime: 300,
-  sessionInput: 1500,
-  breakInput: 300,
+  sessionTime: 5,
+  breakTime: 3,
+  sessionInput: 5,
+  breakInput: 3,
   isRunning: false,
   isSession: true,
-  audioSrc:
-    "https://dm0qx8t0i9gc9.cloudfront.net/previews/audio/BsTwCwBHBjzwub4i4/desk-bell-service-1_GknppZVd_NWM.mp3",
 };
 
 function init(initialState) {
@@ -62,7 +61,7 @@ function reducer(state, action) {
         };
       }
       if (state.breakTime <= 0) {
-        action.payload.play();
+        action.payload.audio.play();
         return {
           ...state,
           isSession: !state.isSession,
@@ -98,8 +97,6 @@ function reducer(state, action) {
           };
 
     case ACTIONS.HANDLE_INCREMENT:
-      console.log(action.payload.id);
-
       return action.payload.id === "session-increment"
         ? {
             ...state,
@@ -115,7 +112,6 @@ function reducer(state, action) {
           };
 
     case ACTIONS.HANDLE_DECREMENT:
-      console.log(action.payload.id);
       return action.payload.id === "session-decrement"
         ? {
             ...state,
@@ -127,11 +123,16 @@ function reducer(state, action) {
             breakTime: state.breakTime - 60,
             breakInput: state.breakInput - 60,
           };
-
     default:
       return state;
   }
 }
+
+// TODO:
+// https://stackoverflow.com/questions/8635502/how-do-i-clear-all-intervals
+// Implement Clock Object
+// https://stackoverflow.com/questions/60838781/controlling-browser-back-button-in-react
+// Modal close on back button
 
 let intervalId = null;
 
@@ -139,6 +140,7 @@ export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState, init);
   const [theme, toggleTheme] = useDarkMode();
   const [modalOpen, setModalOpen] = useState(false);
+  const [sound, setSound] = useLocalStorage("sound", SOUNDS["Campana"]);
   const audioRef = useRef();
   const toggleClock = () => {
     dispatch({
@@ -153,7 +155,6 @@ export default function App() {
       });
     }, 1000);
   };
-
   //  TODO: Validar el almacenamiento local de varialbes
   //  como theme, sessionTime y breakTime
 
@@ -190,12 +191,15 @@ export default function App() {
           />
         </FlexContainer>
 
-        <br></br>
-        <ToggleTheme theme={theme} toggleTheme={toggleTheme} />
-        <br></br>
-        <Modal modalOpen={modalOpen} onClose={() => setModalOpen(false)} />
+        <Modal
+          modalOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          setSound={setSound}
+        />
         <SettingsBtn setModalOpen={setModalOpen} />
-        <audio id="beep" src={state.audioSrc} ref={audioRef}></audio>
+        <audio id="beep" src={sound} ref={audioRef} type="audio/mp3"></audio>
         {/* Display State (Dev) */}
         {/* <div style={{ textAlign: "left" }}>
           <ul>

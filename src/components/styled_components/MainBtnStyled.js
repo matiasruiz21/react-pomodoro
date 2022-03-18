@@ -17,7 +17,7 @@ const MainBtnStyled = styled.button`
   color: #fff;
 
   /* Primary/200 */
-  background: ${({ theme }) => theme.red.background};
+  background-color: ${({ theme }) => theme.red.background};
 
   &:hover {
     box-shadow: 0px 6px 10px 4px rgba(0, 0, 0, 0.15);
