@@ -15,6 +15,8 @@ import Modal from "./components/Modal";
 import { useLocalStorage } from "./components/hooks/useLocalStorage";
 import SOUNDS from "./sounds";
 import useHashRouteToggle from "./components/hooks/useHashRouteToggle";
+import { LinkStyled } from "./components/styled_components/LinkStyled";
+import { GithubSvg } from "./svg/GithubSvg";
 
 export const ACTIONS = {
   TICK: "tick",
@@ -189,7 +191,20 @@ export default function App() {
             breakInput={state.breakInput}
           />
         </FlexContainer>
-
+        <FlexContainer
+          justify={"center"}
+          alignItems={"center"}
+          padding={"5rem 0 0 0"}
+        >
+          <LinkStyled
+            href="https://github.com/matiasruiz21/react-pomodoro"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <p>by mruiz</p>
+            <GithubSvg />
+          </LinkStyled>
+        </FlexContainer>
         <Modal
           modalOpen={modalOpen}
           onClose={() => setModalOpen(false)}
