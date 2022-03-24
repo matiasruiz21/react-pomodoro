@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import { PauseSvg } from "../svg/PauseSvg";
 import { PlaySvg } from "../svg/PlaySvg";
 import { MainBtnStyled } from "./styled_components/MainBtnStyled";
+import clickSound from "../audio/click.mp3";
 
 const ToggleClock = ({ isRunning, toggleClock }) => {
   const btnRef = useRef();
@@ -14,7 +15,11 @@ const ToggleClock = ({ isRunning, toggleClock }) => {
     <MainBtnStyled
       title={isRunning ? "Pause" : "Play"}
       id="start_stop"
-      onClick={() => toggleClock()}
+      onClick={() => {
+        var audio = new Audio(clickSound);
+        audio.play();
+        toggleClock();
+      }}
       ref={btnRef}
     >
       {isRunning ? <PauseSvg /> : <PlaySvg />}

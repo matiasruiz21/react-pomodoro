@@ -7,6 +7,7 @@ const BtnStyled = styled.button`
   padding: ${({ padding }) => padding};
   outline: none;
   border: none;
+  transition: 100ms;
 
   cursor: pointer;
 
@@ -31,7 +32,7 @@ const BtnStyled = styled.button`
   }
 
   &:focus {
-    outline: 2.5px solid ${red[900]};
+    outline: 2px solid ${red[900]};
   }
 `;
 
