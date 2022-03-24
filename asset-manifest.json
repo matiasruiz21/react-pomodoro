@@ -1,18 +1,19 @@
 {
   "files": {
     "main.css": "/react-pomodoro/static/css/main.7a04b9b7.css",
-    "main.js": "/react-pomodoro/static/js/main.b46e6f33.js",
+    "main.js": "/react-pomodoro/static/js/main.b11578c9.js",
     "static/media/winxp.mp3": "/react-pomodoro/static/media/winxp.aad6f88a1bbc52da0f75.mp3",
     "static/media/email.mp3": "/react-pomodoro/static/media/email.946199ba14e33858a82a.mp3",
+    "static/media/click.mp3": "/react-pomodoro/static/media/click.5986ecf2e3fb9cd8827c.mp3",
     "static/media/campana.mp3": "/react-pomodoro/static/media/campana.b1158963d865497ef861.mp3",
     "static/media/best_beep.mp3": "/react-pomodoro/static/media/best_beep.3e489c1a74063bf1bbc7.mp3",
     "static/media/beep.mp3": "/react-pomodoro/static/media/beep.e6555198910e023b903c.mp3",
     "index.html": "/react-pomodoro/index.html",
     "main.7a04b9b7.css.map": "/react-pomodoro/static/css/main.7a04b9b7.css.map",
-    "main.b46e6f33.js.map": "/react-pomodoro/static/js/main.b46e6f33.js.map"
+    "main.b11578c9.js.map": "/react-pomodoro/static/js/main.b11578c9.js.map"
   },
   "entrypoints": [
     "static/css/main.7a04b9b7.css",
-    "static/js/main.b46e6f33.js"
+    "static/js/main.b11578c9.js"
   ]
 }
