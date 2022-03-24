@@ -4,6 +4,8 @@ import { PlaySvg } from "../svg/PlaySvg";
 import { MainBtnStyled } from "./styled_components/MainBtnStyled";
 import clickSound from "../audio/click.mp3";
 
+var audio = new Audio(clickSound);
+
 const ToggleClock = ({ isRunning, toggleClock }) => {
   const btnRef = useRef();
 
@@ -16,7 +18,10 @@ const ToggleClock = ({ isRunning, toggleClock }) => {
       title={isRunning ? "Pause" : "Play"}
       id="start_stop"
       onClick={() => {
-        var audio = new Audio(clickSound);
+        console.log("Play");
+        if (!audio.paused) {
+          audio.currentTime = 0;
+        }
         audio.play();
         toggleClock();
       }}
