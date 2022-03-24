@@ -156,8 +156,10 @@ export default function App() {
     }, 1000);
   };
 
-  //  TODO: Validar el almacenamiento local de varialbes
-  //  como theme, sessionTime y breakTime
+  //  TODO:
+  //  # Validar el almacenamiento local de variables sessionTime y breakTime
+  //  # requestAnimationFrame to prevent any frame loss, use Web worker to run a heavy process in the background:
+  //  # https://abhi9bakshi.medium.com/why-javascript-timer-is-unreliable-and-how-can-you-fix-it-9ff5e6d34ee0
 
   return (
     <ThemeProvider theme={theme === "ligth" ? ligthTheme : darkTheme}>
