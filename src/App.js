@@ -168,6 +168,7 @@ export default function App() {
           isSession={state.isSession}
           sessionTime={state.sessionTime}
           breakTime={state.breakTime}
+          isRunning={state.isRunning}
         />
         <FlexContainer
           justify={"center"}
